@@ -34,8 +34,8 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
 
 	@Override
 	public void create () {
-        float w = (float) (Gdx.graphics.getWidth() /1.8); //*2.6 for phone
-        float h = (float) (Gdx.graphics.getHeight() /1.8);
+        float w = (float) (Gdx.graphics.getWidth() *2.6); //*2.6 for simulated phone doesn't work on mine though
+        float h = (float) (Gdx.graphics.getHeight() *2.6);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
@@ -46,7 +46,8 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
         sprite = new Sprite(texture);
 
 
-        tiledMap = new TmxMapLoader().load("myCrappyMap.tmx");
+        //tiledMap = new TmxMapLoader().load("myCrappyMap.tmx");
+        tiledMap = new TmxMapLoader().load("tafe_basement.tmx");
         //tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         tiledMapRenderer = new OrthogonalTiledMapRenderWithSprites(tiledMap);
         tiledMapRenderer.addSprite(sprite);
