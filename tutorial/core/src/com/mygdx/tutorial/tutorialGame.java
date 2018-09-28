@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class tutorialGame extends ApplicationAdapter implements InputProcessor{
@@ -34,8 +35,8 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
 
 	@Override
 	public void create () {
-        float w = (float) (Gdx.graphics.getWidth() *2.6); //*2.6 for simulated phone doesn't work on mine though
-        float h = (float) (Gdx.graphics.getHeight() *2.6);
+        float w = (float) (Gdx.graphics.getWidth()); //*2.6 for simulated phone doesn't work on mine though
+        float h = (float) (Gdx.graphics.getHeight());
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
@@ -60,6 +61,7 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
 
 	@Override
 	public void render () {
+
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
@@ -75,6 +77,25 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
             camera.unproject(pos);
         }
         sprite.setPosition(pos.x,pos.y);
+        camera.position.set(pos.x ,pos.y ,0); // this sets the new cam pos when you touch the screen
+            camera.update();
+
+            //-------- boundary box for the camera against the map --------///
+            float camX = camera.position.x;
+            float camY = camera.position.y;
+
+            float borderWidth = 4491; // total allowable width
+            float boaderHight = 3215; //total allowable hight
+
+        Vector2 camMin = new Vector2(camera.viewportWidth, camera.viewportHeight);
+        camMin.scl(camera.zoom/2);
+        Vector2 camMax = new Vector2(borderWidth, boaderHight);
+        camMax.sub(camMin);
+
+        camX = Math.min(camMax.x, Math.max(camX, camMin.x));
+        camY = Math.min(camMax.y, Math.max(camY, camMin.y));
+
+        camera.position.set(camX, camY, camera.position.z);
 	}
 
 
@@ -110,9 +131,11 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
         //this renders the sprite on touch bit not smoothly
 //        Vector3 clickCoordinates = new Vector3(screenX,screenY,0);
 //        Vector3 position = camera.unproject(clickCoordinates);
-//        sprite.setPosition(position.x,position.y);
-//        return true;
-        return false;
+//        camera.position.set(sprite.getX(),sprite.getY(),0);
+//        camera.update();
+        //sprite.setPosition(position.x,position.y);
+        return true;
+        //return false;
     }
 
     @Override
