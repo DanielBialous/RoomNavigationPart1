@@ -48,7 +48,7 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
 
 
         //tiledMap = new TmxMapLoader().load("myCrappyMap.tmx");
-        tiledMap = new TmxMapLoader().load("tafe_basement.tmx");
+        tiledMap = new TmxMapLoader().load("basement_39_22.tmx");
         //tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         tiledMapRenderer = new OrthogonalTiledMapRenderWithSprites(tiledMap);
         tiledMapRenderer.addSprite(sprite);
@@ -84,8 +84,8 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
             float camX = camera.position.x;
             float camY = camera.position.y;
 
-            float borderWidth = 4491; // total allowable width
-            float boaderHight = 3215; //total allowable hight
+            float borderWidth = 3944; // total allowable width
+            float boaderHight = 2219; //total allowable hight
 
         Vector2 camMin = new Vector2(camera.viewportWidth, camera.viewportHeight);
         camMin.scl(camera.zoom/2);
