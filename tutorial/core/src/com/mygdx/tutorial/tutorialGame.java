@@ -3,6 +3,7 @@ package com.mygdx.tutorial;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -21,7 +23,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-public class tutorialGame extends ApplicationAdapter implements InputProcessor{
+public class tutorialGame extends ApplicationAdapter implements InputProcessor, GestureDetector.GestureListener {
 	Texture img;
     TiledMap tiledMap;
 	OrthographicCamera camera;
@@ -31,6 +33,11 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
     Texture texture;
     Sprite sprite;
     Vector3 pos;
+
+
+    GestureDetector detect;
+
+
 
 
 	@Override
@@ -52,12 +59,19 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
         //tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         tiledMapRenderer = new OrthogonalTiledMapRenderWithSprites(tiledMap);
         tiledMapRenderer.addSprite(sprite);
-        Gdx.input.setInputProcessor(this);
+       //Gdx.input.setInputProcessor(this);
 
+
+        detect  = new GestureDetector(this);
+        Gdx.input.setInputProcessor(detect);
         //sb = new SpriteBatch();
 
 
 	}
+
+
+
+
 
 	@Override
 	public void render () {
@@ -77,8 +91,8 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
             camera.unproject(pos);
         }
         sprite.setPosition(pos.x,pos.y);
-        camera.position.set(pos.x ,pos.y ,0); // this sets the new cam pos when you touch the screen
-            camera.update();
+        //camera.position.set(pos.x ,pos.y ,0); // this sets the new cam pos when you touch the screen
+           // camera.update();
 
             //-------- boundary box for the camera against the map --------///
             float camX = camera.position.x;
@@ -164,4 +178,60 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor{
 //		batch.dispose();
 //		img.dispose();
 	}
+
+    @Override
+    public boolean touchDown(float x, float y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean tap(float x, float y, int count, int button) {
+
+	    if (count > 1){
+            camera.position.set(pos.x ,pos.y ,0);
+            camera.update();
+        }else{
+        Vector3 touchPos = new Vector3(x,y,10);
+        camera.unproject(touchPos);
+        camera.position.set(touchPos.x, touchPos.y,touchPos.z);
+
+        }
+        return false;
+    }
+
+    @Override
+    public boolean longPress(float x, float y) {
+	    // TODO put code in here for the selection of room on the map dropdown room info or select destination
+        return false;
+    }
+
+    @Override
+    public boolean fling(float velocityX, float velocityY, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
+        return false;
+    }
+
+    @Override
+    public boolean panStop(float x, float y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean zoom(float initialDistance, float distance) {
+        return false;
+    }
+
+    @Override
+    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+        return false;
+    }
+
+    @Override
+    public void pinchStop() {
+
+    }
 }
