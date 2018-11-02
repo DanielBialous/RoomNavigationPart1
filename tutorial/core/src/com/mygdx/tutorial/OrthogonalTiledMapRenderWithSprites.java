@@ -31,7 +31,7 @@ public class OrthogonalTiledMapRenderWithSprites extends OrthogonalTiledMapRende
     @Override
     public void render(){
         beginRender();
-        int currentLayer = 0;
+        int currentLayer = 1;
         for (MapLayer layer : map.getLayers()){
             if(layer.isVisible()){
                 if (layer instanceof TiledMapTileLayer){
