@@ -60,6 +60,7 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor, 
         //tiledMap = new TmxMapLoader().load("myCrappyMap.tmx");
         //tiledMap = new TmxMapLoader().load("basement_39_22.tmx");
         tiledMap = new  TmxMapLoader().load("ground_Level_small.tmx");
+        //tiledMap = new  TmxMapLoader().load("level1_small.tmx");
         //tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         tiledMapRenderer = new OrthogonalTiledMapRenderWithSprites(tiledMap);
         tiledMapRenderer.addSprite(sprite);
@@ -112,8 +113,9 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor, 
 //        float borderWidth = 3944; // total allowable width
 //        float boaderHight = 2219; //total allowable hight
 
-        float borderWidth = 2110;
-        float boaderHight = 1249;
+        // Boarder box for the cameras outer limits //
+        float borderWidth = 2110; // this defines the total amount of width
+        float boaderHight = 1249; // this defines the total amount of hight
 
         Vector2 camMin = new Vector2(camera.viewportWidth, camera.viewportHeight);
         camMin.scl(camera.zoom/2);
@@ -177,14 +179,17 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor, 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-//        Vector2 newTouch = new Vector2(screenX,screenY);
-//        Vector2 delta = newTouch.cpy().sub(lastTouch);
-//        lastTouch = newTouch;
-//
-//        camera.position.set(newTouch.x,newTouch.y, 0);
-//        camera.update();
+        Vector2 newTouch = new Vector2(screenX,screenY);
+       // Vector2 delta =  newTouch.cpy().sub(lastTouch);
+       // delta = newTouch;
 
-        return false;
+        camera.position.set(newTouch.x,newTouch.y, 0);
+        camera.update();
+
+
+
+        //return false;
+        return true;
     }
 
     @Override
@@ -210,10 +215,16 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor, 
         return false;
     }
 
+    // Tap functions for zooming in
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        if(count > 1 )
-            camera.zoom = 1;
+        if(count > 1 ) {
+            camera.zoom = 0.2f;
+        }
+        else if (count > 2){
+            camera.zoom = 1.4f;
+        }
+
 
 
         return false;
@@ -240,18 +251,20 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor, 
         return false;
     }
 
+    //Pinch controls for zoom//
     @Override
     public boolean zoom(float initialDistance, float distance) {
 
-        float zoomFactor = distance/200;
+        float zoomFactor = initialDistance/200;
 
            camera.zoom = zoomFactor;
 
-        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 1.2f); //clamping the min and max on zoom
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 1.4f); //clamping the min and max on zoom
 
         return false;
     }
 
+    //Rotation controls//
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
 
@@ -259,14 +272,20 @@ public class tutorialGame extends ApplicationAdapter implements InputProcessor, 
         float deltaY = pointer2.y - pointer1.y;
 
         float angle = (float)Math.atan2((double)deltaY,(double)deltaX) * MathUtils.radiansToDegrees;
-        angle += 90f;
+        angle += 0f;
 
-        if(angle < 0)
+        if(angle < 0){
             angle = 360f - (-angle);
 
-        camera.rotate(-angle/200);
+        camera.rotate(+angle/250);
+        }else if(angle > 0)
+        {
+            angle = 360f - (+angle);
+            camera.rotate(-angle/250);
+        }
 
-        return true;
+        //return true;
+        return false;
     }
 
     @Override
